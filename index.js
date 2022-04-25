@@ -26,6 +26,11 @@ async function run() {
       const products = await cursor.toArray();
       res.send(products);
     });
+
+    app.get('/pageCount', async (req, res) => {
+      const count =await productCollection.estimatedDocumentCount();
+      res.send({count});
+    });
   } finally {
     // await client.close();
   }
