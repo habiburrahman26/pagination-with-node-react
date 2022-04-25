@@ -21,15 +21,16 @@ async function run() {
     const productCollection = client.db('emaJhon').collection('products');
 
     app.get('/products', async (req, res) => {
+      const page = parseInt(req.query.count);
       const query = {};
       const cursor = productCollection.find(query);
-      const products = await cursor.toArray();
+      const products = await cursor.skip(page*10).limit(10).toArray();
       res.send(products);
     });
 
     app.get('/pageCount', async (req, res) => {
-      const count =await productCollection.estimatedDocumentCount();
-      res.send({count});
+      const count = await productCollection.estimatedDocumentCount();
+      res.send({ count });
     });
   } finally {
     // await client.close();
